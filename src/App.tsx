@@ -4,12 +4,13 @@ import Login from "./components/Login/index";
 import {Route, Switch, Redirect, useHistory} from "react-router-dom";
 import NotFound from "./components/NotFound";
 import FixCookies from "./components/FixCookies/index";
-import localStorageAvailable from "./helpers/localstorage";
+import localStorageAvailable, {localStorageHasJWT} from "./helpers/localstorage";
 
 function App() {
   const history = useHistory();
   useEffect(() => {
-    if(!localStorageAvailable()) history.push("/fix-cookies");
+    if(!localStorageAvailable()) return history.push("/fix-cookies");
+    if(!localStorageHasJWT()) return history.push("/");
 });
 
   return( 

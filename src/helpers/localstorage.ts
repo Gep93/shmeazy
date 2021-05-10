@@ -8,4 +8,13 @@ const localStorageAvailable = () : boolean => {
     }
 }
 
+const localStorageHasJWT = (): boolean => {
+    try {
+        return localStorage.getItem("jwt") ? true : false;
+    } catch(err) {
+        return false;
+    }
+}
+
 export default localStorageAvailable;
+export {localStorageHasJWT};
