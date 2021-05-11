@@ -13,15 +13,16 @@ function App() {
     if(!localStorageHasJWT()) return history.push("/");
 });
 
-  return( 
+return( 
   <>
-  <Switch>
-    <Route exact path="/" component={Login} />
-    <Route exact path="/not-found" component={NotFound} />
-    <Route exact path="/fix-cookies" component={FixCookies} />
-    <Redirect to="/not-found" />
-  </Switch>
-  </>);
+    <Switch>
+      <Route exact path="/" component={Login} />
+      <Route exact path="/not-found" component={NotFound} />
+      <Route exact path="/fix-cookies" component={FixCookies} />
+      <Redirect to="/not-found" />
+    </Switch>
+  </>
+  );
 }
 
 export default App;

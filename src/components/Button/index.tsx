@@ -1,30 +1,31 @@
+import React from "react";
 import { isTypeLiteralNode } from "typescript";
+import {StyledButton} from './style';
 
-interface Istyles {
-    [key:string]: string
+interface IbuttonAttributes {
+    color?: string,
+    border?: string,
+    padding?: string,
+    width?: string,
+    borderRadius?: string,
+    background?: string,
+    fontWeight?: string,
+    cursor?: string
 }
 
-const Button = (props: any) => {
-    let styles: Istyles = {
-        width: "100%",
-        border: "0",
-        padding: "10px",
-        borderRadius: "10px",
-        background: "white",
-        fontWeight:"bold",
-        cursor:"pointer",
-    }
-
-    if(props.style)
-        styles = {...styles, ...props.style}
-
+type ButtonComponentProps = {
+    children?: HTMLCollection | string,
+    width?: string,
+    onClick?: (e?: React.MouseEvent) => void
+  } & React.ButtonHTMLAttributes<HTMLButtonElement> & IbuttonAttributes;
+const Button = ({children, type, ...rest}: ButtonComponentProps) => {
 
     const handleClick = () => {
-        props.onClick && props.onClick();
+        rest.onClick && rest.onClick();
     }
 
     return (
-        <button style={styles} type={props.type} onClick={handleClick}>{props.children}</button>
+        <StyledButton type={type} {...rest} onClick={handleClick}>{children}</StyledButton>
     );
 }
 

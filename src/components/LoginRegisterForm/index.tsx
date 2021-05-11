@@ -20,10 +20,11 @@ interface Ischema {
     [key: string]: Joi.StringSchema | Joi.AnySchema,
 }
 
-const LoginRegisterForm = ({login}: {login?: boolean}) => {
+const LoginRegisterForm = ({login}: {login: boolean}) => {
     const loginFields = {email:"", password:""};
     const registerFields = {username: "", ...loginFields};
-    const initialInputVals: any = login ? loginFields : registerFields;
+    // const initialInputVals: any = login ? loginFields : registerFields;
+    const initialInputVals: any = registerFields;
 
     const [inputValues, setInputValue] = useState<Idata>(initialInputVals);
     const [errors, setErrors] = useState<Ierrors>(initialInputVals);
@@ -70,7 +71,10 @@ const LoginRegisterForm = ({login}: {login?: boolean}) => {
     }
 
     const validate = (): boolean => {
-        const {error} = Joi.object(schema).validate({...inputValues}, {abortEarly: false});
+        let value: Idata = {...inputValues};
+        if(login) value = {email: inputValues.email, password: inputValues.password}
+        
+        const {error} = Joi.object(schema).validate(value, {abortEarly: false});
         if(!error) return true;
         console.log(error);
         let errs:Ierrors = {};
