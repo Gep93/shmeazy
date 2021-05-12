@@ -29,6 +29,7 @@ export const StyledButton = styled.button<Ibutton>`
     padding: 10px;
     border-radius: 10px;
     background: ${(props) => props.light ? '#0D0E11' : 'white'};
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
 `;

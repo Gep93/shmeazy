@@ -21,19 +21,15 @@ interface Ischema {
 }
 
 const LoginRegisterForm = ({login}: {login: boolean}) => {
-    const loginFields = {email:"", password:""};
-    const registerFields = {username: "", ...loginFields};
-    // const initialInputVals: any = login ? loginFields : registerFields;
-    const initialInputVals: any = registerFields;
-
-    const [inputValues, setInputValue] = useState<Idata>(initialInputVals);
-    const [errors, setErrors] = useState<Ierrors>(initialInputVals);
+    const formFields: any = {username:"", email:"", password:""};
+    const [inputValues, setInputValue] = useState<Idata>(formFields);
+    const [errors, setErrors] = useState<Ierrors>(formFields);
     const [showPassword, togglePassword] = useToggleState(false);
 
-    useEffect(() => {
-        setInputValue(initialInputVals);
-        setErrors(initialInputVals);
-    }, [login])
+    // useEffect(() => {
+    //     setInputValue(formFields);
+    //     setErrors(formFields);
+    // }, [login])
 
     let schema: Ischema = {
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required().label("Email"),

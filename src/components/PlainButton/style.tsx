@@ -6,6 +6,7 @@ export const PlainStyledButton = styled.button`
     padding: 10px;
     border-radius: 10px;
     background: transparent;
+    font-size: 15px!important;
     font-weight: bold;
     cursor: pointer;
 `;
