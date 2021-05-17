@@ -59,8 +59,10 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
         e.preventDefault();
         if(!validate()) return;
         if(login) {
-            const jwt = await authenticateUser(inputValues);
+            console.log("submit");
+            const jwt = await authenticateUser({email: inputValues.email, password: inputValues.password});
             localStorage.setItem("jwt", jwt);
+            console.log(jwt);
             return;
         } 
         createNewUser(inputValues);
@@ -68,11 +70,10 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
 
     const validate = (): boolean => {
         let value: Idata = {...inputValues};
-        if(login) value = {email: inputValues.email, password: inputValues.password}
+        if(login) value = {email: inputValues.email, password: inputValues.password};
         
         const {error} = Joi.object(schema).validate(value, {abortEarly: false});
         if(!error) return true;
-        console.log(error);
         let errs:Ierrors = {};
         error.details.forEach((err)=> {
             errs[err.path[0]] = err.message;

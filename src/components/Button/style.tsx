@@ -23,12 +23,13 @@ interface Ibutton {
 // `;
 
 export const StyledButton = styled.button<Ibutton>`
-    color: rgb(232, 23, 93, 1);
+    color: #c8c8c8;
     width: ${(props) => props.width ? props.width : '100%'};
     border: ${(props) => props.border ? props.border : 'none'};
     padding: 10px;
+    margin: 0;
     border-radius: 10px;
-    background: ${(props) => props.light ? '#0D0E11' : 'white'};
+    background: ${(props) => props.light ? 'white' : '#0D0E11'};
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
