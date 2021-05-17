@@ -5,6 +5,7 @@ import FlexContainer from "../FlexContainer/index";
 import HorizontalSpacer from "../HorizontalSpacer";
 import VerticalSpacer from "../VerticalSpacer";
 import ShoppingListCard from "../ShoppingListCard/index";
+import {v4 as uuidv4} from "uuid";
 
 import {useEffect, useState} from "react";
 import {getLists} from "../../services/httpServices";
@@ -58,8 +59,8 @@ const ShoppingLists = () => {
                         const {name, created} = list;
                             return(
                                 <>
-                                    <ShoppingListCard shmeazyLightBlack name={name} created={created} />
-                                    <VerticalSpacer smallSpacer/>
+                                    <ShoppingListCard key={uuidv4()} shmeazyLightBlack name={name} created={created} />
+                                    <VerticalSpacer key={uuidv4()} smallSpacer/>
                                 </>
                             );
                         })
