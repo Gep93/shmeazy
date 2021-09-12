@@ -16,6 +16,7 @@ const getFont = (fontSize: string) => {
 export const StyledFont = styled.div<IProps>`
     color: #c8c8c8;
     font-size: ${props => props.fontSize ? getFont(props.fontSize) : "20px"};
+    /* width:100%; */
     //font-family: props from config
     //color: props from config
 `;

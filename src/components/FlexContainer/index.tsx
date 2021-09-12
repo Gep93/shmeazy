@@ -1,3 +1,4 @@
+import { useTheme } from "../../contexts/ThemeProvider";
 import Font from "../Font";
 import { StyledFlexContainer } from "./style";
 
@@ -6,11 +7,11 @@ interface IFlexContainer {
     row?: boolean | undefined,
 }
 
-const FlexContainer = ({children, ...rest}: IFlexContainer & {[key:string]: string | boolean | JSX.Element | JSX.Element[]}) => {
+const FlexContainer = ({children, id, ...rest}: IFlexContainer & {[key:string]: string | number | boolean | JSX.Element | JSX.Element[] | (() => void)}) => {
+    const {theme} = useTheme();
+
     return(
-        <Font>
-            <StyledFlexContainer {...rest}>{children}</StyledFlexContainer>
-        </Font>
+        <StyledFlexContainer id={id} theme={theme} {...rest}>{children}</StyledFlexContainer>
     );
 }
 

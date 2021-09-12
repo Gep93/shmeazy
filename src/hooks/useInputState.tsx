@@ -5,7 +5,6 @@ export default (initialValue: string): [string, (e: FormEvent<HTMLInputElement>)
     const [value, setValue] = useState(initialValue);
 
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        console.log(e.currentTarget.name);
         setValue(e.currentTarget.value);
     }
 

@@ -16,5 +16,9 @@ const localStorageHasJWT = (): boolean => {
     }
 }
 
+const deleteJWT = () => {
+    localStorage.setItem("jwt", "");
+}
+
 export default localStorageAvailable;
-export {localStorageHasJWT};
+export {localStorageHasJWT, deleteJWT};

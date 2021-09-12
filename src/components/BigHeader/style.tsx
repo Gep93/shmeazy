@@ -15,3 +15,10 @@ export const StyledBigHeader = styled.h1<IProps>`
     text-align:left;
     margin: 0;
 `;
+
+export const StyledBigHeaderEditable = styled(StyledBigHeader)`
+    &input{
+        color: rgb(232, 23, 93, 1);
+        font-size: 35px;
+    }
+`;

@@ -1,6 +1,10 @@
+import FlexContainer from "../FlexContainer";
+
 const FixCookies = () => {
     return(
-        <h1 style={{color: "white"}}>Please allow this website to use cookies in your browsers security settings.</h1>
+        <FlexContainer alignItems="center" center column>
+            <h1 style={{color:"white"}}><h1 style={{color: "white"}}>Please allow this website to use cookies in your browsers security settings.</h1></h1>
+        </FlexContainer>
     );
 }
 

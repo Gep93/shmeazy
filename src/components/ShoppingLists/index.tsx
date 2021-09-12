@@ -4,62 +4,127 @@ import BigHeader from "../BigHeader";
 import FlexContainer from "../FlexContainer/index";
 import HorizontalSpacer from "../HorizontalSpacer";
 import VerticalSpacer from "../VerticalSpacer";
-import ShoppingListCard from "../ShoppingListCard/index";
+import ShoppingListCard from "../ShoppingLists/ShoppingListCard/index";
 import {v4 as uuidv4} from "uuid";
-
-import {useEffect, useState} from "react";
-import {getLists} from "../../services/httpServices";
-
+import React, {useEffect, useState} from "react";
+import {useHistory} from "react-router-dom";
+import {addNewShoppingList, getShoppingLists} from "../../services/httpServices";
 import {localStorageHasJWT} from "../../helpers/localstorage";
+import PopupContainer from "../PopupContainer";
+import useToggleState from "../../hooks/useToggleState";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useIdsReducer } from "../../hooks/useIdsReducer";
+import deleteShoppingLists from "../../helpers/shoppingLists";
+import { IShoppingList } from "../../../types";
 //.blue::-webkit-scrollbar {
     //display: none;
 //}
-interface ILists {
-    _id: string,
-    shoppingLists: IList[]
-}
 
-interface IList {
-    name: string,
-    created: string,
-    quantity: string,
-    unit: string,
-    packaging: string,
-    note: string
-}
 const ShoppingLists = () => {
-    const [lists, setLists] = useState<null | ILists>(null);
+    const {getJWT} = useLocalStorage();
+    const [lists, setLists] = useState<IShoppingList[] | null>(null); //{name:string, created: string, _id: string}
+    const [show, toggleShow] = useToggleState(false);
+    const [ids, updateIds] = useIdsReducer([]);
+    const [deleteMany, toggleDeleteMany] = useToggleState(false);
 
     useEffect(() => {
         if(!localStorageHasJWT()) return; 
         (async() => {
-            let token: string = localStorage.getItem("jwt") as string;
-            let lists: any = await getLists(token);
-            setLists(lists.data);
+            const token: string = localStorage.getItem("jwt") as string;
+            const lists = await getShoppingLists(token);
+            console.log("LISTS",lists);
+            setLists(lists);
         })();
     }, []);
 
+    const history = useHistory();
+
+    const handleClick = (id: string) => { // (i: number)
+        // history.push(`/shopping-list/${lists![i]._id}`)
+        history.push(`/shopping-list/${id}`)
+    }
+
+    const handleCancel = () => {
+        toggleShow();
+    }
+
+    const handleConfirm = async (target:any) => {
+        try {
+            const data = await addNewShoppingList(getJWT(), {name: target, created: Date.now().toString(), items: []});
+            if(!data || !data.hasOwnProperty("lists")) return alert("Something went wrong with saving lists, try again!");
+            const newLists = data.lists;
+            setLists(newLists);
+            toggleShow();
+        }
+        catch (err) {
+            console.log("ERR", err);
+        }
+    }
+
+    const addList = (e: React.MouseEvent) => {
+        e.preventDefault();
+        toggleShow();
+    }
+
+    const doDeleteMany = () => {
+        toggleDeleteMany();
+    }
+
+    const closeDeleteMany = () => {
+        updateIds({type:'DELETE_ALL'});
+        toggleDeleteMany();
+    }
+
+    const deleteSelectedLists = async () => {
+        const data = await deleteShoppingLists(lists!, ids, getJWT());
+        if(!data.lists) return alert("Something went wrong. Try saving the item again."); 
+        setLists(data.lists);
+        toggleDeleteMany();
+    }
+
+    let toolbar = 
+    <FlexContainer row padding="0" height="auto">
+    <i className="fas fa-plus" onClick={addList}></i>
+    <HorizontalSpacer />
+    <i className="far fa-clock"></i>
+    <HorizontalSpacer />
+    <i className="fas fa-trash" onClick={doDeleteMany}></i>
+    </FlexContainer>;
+
+    if(deleteMany) {
+    toolbar = 
+        <FlexContainer row padding="0" height="auto">
+            <i className="fas fa-times" aria-hidden="true" onClick={closeDeleteMany}></i>
+        <HorizontalSpacer />
+            <i className="fas fa-check" onClick={deleteSelectedLists}></i>
+        </FlexContainer>;
+    }
+
     return (
         <FlexContainer>
+            <PopupContainer show={show}>
+                <PopupContainer.ShoppingListTitleForm cancel={handleCancel} confirm={handleConfirm}/>
+            </PopupContainer>
             <BigHeader pTop="30px">Shopping Lists</BigHeader>
             <Font fontSize="ShmeazyMedium">
                 <FlexContainer row spaceBetween height="auto" padding="0 10px 40px 10px">
                         <span>My Lists</span>
-                        <FlexContainer row padding="0" height="auto">
-                            <i className="fas fa-plus"></i>
+                        {toolbar}
+                        {/* <FlexContainer row padding="0" height="auto">
+                            <i className="fas fa-plus" onClick={addList}></i>
                             <HorizontalSpacer />
                             <i className="far fa-clock"></i>
                             <HorizontalSpacer />
-                            <i className="fas fa-trash"></i>
-                        </FlexContainer>
+                            <i className="fas fa-trash" onClick={doDeleteMany}></i>
+                        </FlexContainer> */}
                 </FlexContainer>               
             </Font>
                 <ScrollY>
-                    {lists && lists.shoppingLists.map((list: IList) => {
-                        const {name, created} = list;
+                    {lists && lists.map((list: IShoppingList, i: number) => {//{name: string, created: string, _id: string}
+                        const {_id, name, created} = list;
                             return(
                                 <>
-                                    <ShoppingListCard key={uuidv4()} shmeazyLightBlack name={name} created={created} />
+                                    <ShoppingListCard id={_id as string} key={uuidv4()} click={handleClick} updateIds={updateIds} toDelete={ids.includes(_id)} deleteMany={deleteMany} shmeazyLightBlack name={name} created={created} />
                                     <VerticalSpacer key={uuidv4()} smallSpacer/>
                                 </>
                             );

@@ -4,6 +4,7 @@ interface Ibutton {
     color?: string,
     border?: string,
     padding?: string,
+    margin?: string,
     width?: string,
     borderRadius?: string,
     cursor?: string,
@@ -23,13 +24,13 @@ interface Ibutton {
 // `;
 
 export const StyledButton = styled.button<Ibutton>`
-    color: #c8c8c8;
+    color: ${(props) => props.light ? 'white' : '#c8c8c8'};
     width: ${(props) => props.width ? props.width : '100%'};
-    border: ${(props) => props.border ? props.border : 'none'};
-    padding: 10px;
-    margin: 0;
+    border: ${(props) => props.border ? "1px solid" + props.border : 'none'};
+    padding: ${props => props.padding ? props.padding : '10px'};
+    margin: ${props => props.margin ? props.margin : 0};
     border-radius: 10px;
-    background: ${(props) => props.light ? 'white' : '#0D0E11'};
+    background: ${(props) => props.light ? '#0D0E11' : '#0D0E11'};
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;

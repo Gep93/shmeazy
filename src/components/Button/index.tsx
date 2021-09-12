@@ -16,12 +16,14 @@ interface IbuttonAttributes {
 type ButtonComponentProps = {
     children?: HTMLCollection | string,
     width?: string,
-    onClick?: (e?: React.MouseEvent) => void
+    margin?: string,
+    onClick?: (e: React.MouseEvent) => void,
+    light?: boolean
   } & React.ButtonHTMLAttributes<HTMLButtonElement> & IbuttonAttributes;
 const Button = ({children, type, ...rest}: ButtonComponentProps) => {
 
-    const handleClick = () => {
-        rest.onClick && rest.onClick();
+    const handleClick = (e:React.MouseEvent) => {
+        rest.onClick && rest.onClick(e);
     }
 
     return (

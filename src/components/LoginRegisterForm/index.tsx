@@ -1,37 +1,24 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import useToggleState from "../../hooks/useToggleState";
 import { FormEvent } from "react";
-import Joi, { string } from "joi";
+import Joi from "joi";
 import authenticateUser, {createNewUser} from "../../services/httpServices";
 import "../LoginRegisterForm/index.css";
 import Button from "../Button";
-
-interface Idata {
-    username?: string,
-    email: string,
-    password: string
-}
-
-interface Ierrors {
-    [key: string]: string
-}
-
-interface Ischema {
-    [key: string]: Joi.StringSchema | Joi.AnySchema,
-}
+import { useHistory } from "react-router-dom";
+import { IData, IErrors, ISchema } from "../../../types";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 const LoginRegisterForm = ({login}: {login: boolean}) => {
+    const {theme} = useTheme();
     const formFields: any = {username:"", email:"", password:""};
-    const [inputValues, setInputValue] = useState<Idata>(formFields);
-    const [errors, setErrors] = useState<Ierrors>(formFields);
+    const [inputValues, setInputValue] = useState<IData>(formFields);
+    const [errors, setErrors] = useState<IErrors>(formFields);
     const [showPassword, togglePassword] = useToggleState(false);
 
-    // useEffect(() => {
-    //     setInputValue(formFields);
-    //     setErrors(formFields);
-    // }, [login])
+    const history = useHistory();
 
-    let schema: Ischema = {
+    let schema: ISchema = {
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required().label("Email"),
         password: Joi.string().min(6).max(20).required().label("Password"),
     }
@@ -48,7 +35,7 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
         const {error} = testSchema.validate({[name]:value});
         if(!error) return setErrors({...errors, [name]: ""});
         
-        let errs:Ierrors = {...errors};
+        let errs:IErrors = {...errors};
         error.details.forEach((err)=> {
             errs[err.path[0]] = err.message;
         });
@@ -59,22 +46,21 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
         e.preventDefault();
         if(!validate()) return;
         if(login) {
-            console.log("submit");
             const jwt = await authenticateUser({email: inputValues.email, password: inputValues.password});
             localStorage.setItem("jwt", jwt);
             console.log(jwt);
+            history.push("/shopping-lists");
             return;
         } 
         createNewUser(inputValues);
     }
 
     const validate = (): boolean => {
-        let value: Idata = {...inputValues};
+        let value: IData = {...inputValues};
         if(login) value = {email: inputValues.email, password: inputValues.password};
-        
         const {error} = Joi.object(schema).validate(value, {abortEarly: false});
         if(!error) return true;
-        let errs:Ierrors = {};
+        let errs:IErrors = {};
         error.details.forEach((err)=> {
             errs[err.path[0]] = err.message;
         });
@@ -102,7 +88,7 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
                 </div>
                 <span className="LoginErrorMessage">{errors.password}</span>
             </div>
-            <Button type="submit">{login ? "Login" : "Create Account"}</Button>
+            <Button border={theme.color.shmeazyWhite} type="submit">{login ? "Login" : "Create Account"}</Button>
         </form>
     );
 }
