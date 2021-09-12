@@ -45,7 +45,6 @@ useEffect(() => {
         const token: string = localStorage.getItem("jwt") as string;
         const list = await getShoppingList(token, _id);
         dispatch({type:'UPDATE_LIST', list: list});
-        console.log("lists", list);
     })();
 }, []);
 
@@ -64,14 +63,12 @@ const editItem = (id: string) => {
     const _list = list as unknown as IShoppingList
     const _item = _list.items.find(item => item._id === id);
     if(_item === null) return;
-    console.log(_item);
     setCurrentItem(_item!);
     toggleShowForm();
 }
 
 const saveItem = async (item: IItem) => {
     const data = await saveShoppingItem(list!, item, getJWT(), listId);
-    console.log(data.list);
     if(!data.list) return alert("Something went wrong. Try saving the item again.");
     dispatch({type:'UPDATE_LIST', list: data.list});
     toggleShowForm();
@@ -113,9 +110,6 @@ const deleteItems = async () => {
 // }
 
 const singleClick = (id?: string) => {
-    console.log("SINGLE CLICK");
-    // setExpandedCardItem(list.items.find((item: IItem) => item._id === id));
-    console.log(sliding.current);
     if(sliding.current) return sliding.current = false;
     if(!id || id === expandedId) return setExpandedId(null); //setExpandedId(null) if y scroll.
     setExpandedId(id);

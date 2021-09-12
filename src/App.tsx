@@ -28,8 +28,8 @@ return(
           <Route exact path="/shopping-list/:id" component={ShoppingList} />
         </ShoppingListsProvider>
         <Route exact path="/fix-cookies" component={FixCookies} />
-        <Route exact path="/not-found" component={NotFound} />
-        <Redirect to="/not-found" />
+        {/* <Route exact path="/not-found" component={NotFound} /> */}
+        {/* <Redirect to="/not-found" /> */}
       </ThemeProvider>
     </Switch>
   </>

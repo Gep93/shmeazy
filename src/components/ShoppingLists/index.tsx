@@ -32,15 +32,13 @@ const ShoppingLists = () => {
         (async() => {
             const token: string = localStorage.getItem("jwt") as string;
             const lists = await getShoppingLists(token);
-            console.log("LISTS",lists);
             setLists(lists);
         })();
     }, []);
 
     const history = useHistory();
 
-    const handleClick = (id: string) => { // (i: number)
-        // history.push(`/shopping-list/${lists![i]._id}`)
+    const handleClick = (id: string) => {
         history.push(`/shopping-list/${id}`)
     }
 
