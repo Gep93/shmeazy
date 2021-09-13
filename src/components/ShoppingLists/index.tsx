@@ -93,7 +93,7 @@ const ShoppingLists = () => {
     toolbar = 
         <FlexContainer row padding="0" height="auto">
             <i className="fas fa-times" aria-hidden="true" onClick={closeDeleteMany}></i>
-        <HorizontalSpacer />
+            <HorizontalSpacer />
             <i className="fas fa-check" onClick={deleteSelectedLists}></i>
         </FlexContainer>;
     }
@@ -108,13 +108,6 @@ const ShoppingLists = () => {
                 <FlexContainer row spaceBetween height="auto" padding="0 10px 40px 10px">
                         <span>My Lists</span>
                         {toolbar}
-                        {/* <FlexContainer row padding="0" height="auto">
-                            <i className="fas fa-plus" onClick={addList}></i>
-                            <HorizontalSpacer />
-                            <i className="far fa-clock"></i>
-                            <HorizontalSpacer />
-                            <i className="fas fa-trash" onClick={doDeleteMany}></i>
-                        </FlexContainer> */}
                 </FlexContainer>               
             </Font>
                 <ScrollY>

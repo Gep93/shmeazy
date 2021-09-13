@@ -1,11 +1,11 @@
-import { MouseEvent, MutableRefObject, useRef } from "react";
-import { IItem, IScroll, ISlideInfo } from "../../../types";
+import { MouseEvent, useRef } from "react";
+import { IItem, IScrollYSlideX, ISlideInfo } from "../../../types";
 import ShoppingItem from "../ShoppingList/ShoppingItem";
 import VerticalSpacer from "../VerticalSpacer";
 import StyledScrollYSlidex from "./style";
 import {v4 as uuidv4} from "uuid";
 
-const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany, singleClick, doubleClick, deleteSingle, sliding}: IScroll & {items: IItem[], ids: string[], expandedId: string | null, deleteSingle: (id: string)=>void, sliding: MutableRefObject<boolean>}) => {
+const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany, singleClick, doubleClick, deleteSingle, sliding}: IScrollYSlideX) => {
     let speed = 0;
     let previousX = 0;
     let previousXtime = 0;
@@ -33,20 +33,18 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
 
       const slideInfo = useRef({...slideInfoInit});
     
-    const handleMouseDown = (e: MouseEvent, id: string) => {
+    const onMouseDown = (e: MouseEvent, id: string) => {
         if (e.buttons !== 1) return;
         if ((id === undefined) || (id === "")) return;
-
         const item = document.getElementById(id);
         item!.style.transitionDuration = "0s";
         const itemWidth = item!.getBoundingClientRect().width;
         const initX = e.clientX;
         const initY = e.clientY;
-
         slideInfo.current = {...slideInfoInit, mouseDown: true, item, itemWidth, initX, initY};
     }
 
-    const handleMouseUp = (e: MouseEvent, id: string) => {
+    const onMouseUp = (e: MouseEvent, id: string) => {
         if (!slideInfo.current.mouseDown) return;
         clearTimeout(timer!);
         const offset =
@@ -74,7 +72,7 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
         currentX = 0;
     }
 
-    const handleMouseMove = (e: MouseEvent, id: string) => {
+    const onMouseMove = (e: MouseEvent, id: string) => {
         if (!slideInfo.current.mouseDown) return;
         if (slideInfo.current.slideY) return;
         if (slideInfo.current.slideX) return slide(e);
@@ -96,7 +94,6 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
 
     const onTouchStart = (e: React.TouchEvent, id: string) => {
         if ((id === undefined) || (id === "")) return;
-
         const item = document.getElementById(id);
         item!.style.transitionDuration = "0s";
         const itemWidth = item!.getBoundingClientRect().width;
@@ -174,10 +171,9 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
         // currentX = e.clientX;
         currentXtime = Date.now();
         if (previousX - currentX > 10) {
-          const deltaX = currentX - previousX;
-          const deltaT = (currentXtime - previousXtime) / 1000;
-          speed = deltaX / deltaT;
-          // speed = (currentX - previousX) / ((currentXtime - previousXtime) / 1000);
+          const dX = currentX - previousX;
+          const dT = (currentXtime - previousXtime) / 1000;
+          speed = dX / dT;
           previousX = currentX;
           previousXtime = currentXtime;
           clearTimeout(timer!);
@@ -197,7 +193,8 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
     
     const calculateOffset = (e:any) => {
       let _clientX = 0;
-      if(e.type === 'touchmove') _clientX = e.touches[0].clientX;
+      if (e.type === 'touchmove') _clientX = e.touches[0].clientX;
+      else if (e.type === 'touchend') _clientX = currentX;
       else _clientX = e.clientX;
       let offset = _clientX - slideInfo.current.initX;
       if (slideInfo.current.initialDirection === Direction.LEFT) offset += 10;
@@ -208,7 +205,9 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
     const changeOpacity = (e:any) => {
       if (slideInfo.current.initialDirection === Direction.LEFT) {
         let init = slideInfo.current.initX;
-        init -= e.clientX;
+        if (e.type === 'touchmove') init -= e.touches[0].clientX;
+        else init -= e.clientX;
+        
         let res = Math.round(init / 10);
         res = res > 20 ? 20 : res;
         slideInfo.current.item.parentNode.children[1].style.opacity = `${res * 0.05}`;
@@ -227,9 +226,9 @@ const ScrollYSlideX = ({items, ids, expandedId, editItem, updateIds, deleteMany,
                     <>
                         <div 
                             key={uuidv4()} 
-                            onMouseDown={(e)=>handleMouseDown(e, item._id!)}
-                            onMouseUp={(e)=>handleMouseUp(e, item._id!)}
-                            onMouseMove={(e)=>handleMouseMove(e, item._id!)}
+                            onMouseDown={(e)=>onMouseDown(e, item._id!)}
+                            onMouseUp={(e)=>onMouseUp(e, item._id!)}
+                            onMouseMove={(e)=>onMouseMove(e, item._id!)}
                             onTouchStart={(e)=>onTouchStart(e, item._id!)}
                             onTouchEnd={(e)=>onTouchEnd(e, item._id!)}
                             onTouchMove={(e)=>onTouchMove(e, item._id!)}

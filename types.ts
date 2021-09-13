@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { MutableRefObject } from "react";
 
 export interface IItem {
     _id?: string,
@@ -41,7 +42,7 @@ export interface ICard {
     updateIds: ({type, id}:{type: string, id: string})=>void;
 }
 
-export interface IScroll {
+export interface IScrollYSlideX {
     items: IItem[],
     ids: string[],
     deleteMany: boolean,
@@ -52,6 +53,8 @@ export interface IScroll {
     doubleClick?: (id: string)=>void,
     updateIds: ({type, id}:{type: string, id: string})=>void,
     editItem?: (id:string)=>void,
+    deleteSingle: (id: string)=>void, 
+    sliding: MutableRefObject<boolean>
 }
 
 export interface ISlideInfo {

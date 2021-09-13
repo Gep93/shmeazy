@@ -43,7 +43,7 @@ const Card = ({id, item, toDelete, expandItem, editItem, deleteMany, updateIds, 
 
     const backgroundColor = item.checked ? background.shmeazyLightBlack : background.shmeazyLightBlack;
     return(
-        <FlexContainer row padding="0px" height="auto" onClick={handleClickItem} alignItems="center">
+        <FlexContainer row position="relative" padding="0px" height="auto" onClick={handleClickItem} alignItems="center">
             <FlexContainer id={item._id!} padding="30px" background={backgroundColor} zIndex={2} height="auto" width="100%">
                 <FlexItem alignEnd>
                     {pencil}
@@ -111,7 +111,7 @@ const Form = ({currentItem, inputs, textAreas, cancelForm, saveItem}:{currentIte
                     </table>
                     <FlexContainer row spaceBetween height="auto">
                         <Button border={theme.color.shmeazyWhite} margin="0px" width="30%" type="submit">Save</Button>
-                        <Button border={theme.color.shmeazyWhite} width="30%" onClick={cancelForm}>Cancel</Button>
+                        <Button border={theme.color.shmeazyWhite} width="30%" type="button" onClick={cancelForm}>Cancel</Button>
                     </FlexContainer>
                 </form>
             </FlexItem>

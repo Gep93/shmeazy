@@ -103,12 +103,6 @@ const deleteItems = async () => {
     toggleDeleteMany();
 }
 
-// const doToggleCheckItem = async (_id: string) => {
-//      const newList =  await toggleAndSortCheckedItem(_id, list, getJWT(), id);
-//      if(!newList) return alert("Something went wrong. Try saving the item again.");
-//      dispatch({type: 'UPDATE_LIST', list: newList});
-// }
-
 const singleClick = (id?: string) => {
     if(sliding.current) return sliding.current = false;
     if(!id || id === expandedId) return setExpandedId(null); //setExpandedId(null) if y scroll.
@@ -145,7 +139,7 @@ return(
     <FlexContainer>
         <BigHeader pTop="30px">{list!.name}</BigHeader>
         <FlexContainer fontSize={theme.fontSize.shmeazyNormal} row spaceBetween height="auto" padding="0 10px 40px 10px">
-                <span onClick={()=>history.push("/shopping-lists")}>Home</span>
+                <span style={{cursor: "pointer"}} onClick={()=>history.push("/shopping-lists")}>Home</span>
                 {toolbar}
         </FlexContainer> 
         <>
@@ -161,9 +155,10 @@ return(
             deleteSingle={deleteSingle}
             sliding={sliding}
          />
-         {showForm && <ShoppingItem key={uuidv4()}>
+         {showForm && 
+            <ShoppingItem key={uuidv4()}>
                     <ShoppingItem.Form saveItem={saveItem} cancelForm={toggleForm} currentItem={currentItem as IItem & {[key:string]: string}} inputs={["name", "quantity", "unit", "packaging"]} textAreas={["note"]}/>
-                </ShoppingItem> }
+            </ShoppingItem>}
         </>
     </FlexContainer>
 );
