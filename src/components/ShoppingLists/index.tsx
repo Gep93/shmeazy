@@ -27,16 +27,16 @@ const ShoppingLists = () => {
     const [ids, updateIds] = useIdsReducer([]);
     const [deleteMany, toggleDeleteMany] = useToggleState(false);
 
+    const history = useHistory();
+
     useEffect(() => {
-        if(!localStorageHasJWT()) return; 
+        if(!localStorageHasJWT()) history.push("/"); 
         (async() => {
             const token: string = localStorage.getItem("jwt") as string;
             const lists = await getShoppingLists(token);
             setLists(lists);
         })();
     }, []);
-
-    const history = useHistory();
 
     const handleClick = (id: string) => {
         history.push(`/shopping-list/${id}`)

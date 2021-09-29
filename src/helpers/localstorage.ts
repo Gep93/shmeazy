@@ -10,7 +10,11 @@ const localStorageAvailable = () : boolean => {
 
 const localStorageHasJWT = (): boolean => {
     try {
-        return localStorage.getItem("jwt") ? true : false;
+        console.log(typeof localStorage.getItem("jwt"));
+        if(localStorage.getItem("jwt") !== 'null' && localStorage.getItem("jwt") !== 'undefined')
+            return true;
+        return false;
+        // return localStorage.getItem("jwt") ? true : false;
     } catch(err) {
         return false;
     }

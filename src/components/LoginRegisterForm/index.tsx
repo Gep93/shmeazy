@@ -48,8 +48,9 @@ const LoginRegisterForm = ({login}: {login: boolean}) => {
         if(login) {
             const jwt = await authenticateUser({email: inputValues.email, password: inputValues.password});
             localStorage.setItem("jwt", jwt);
-            console.log(jwt);
-            history.push("/shopping-lists");
+            console.log("jwt",jwt);
+            if(jwt)
+                history.push("/shopping-lists");
             return;
         } 
         createNewUser(inputValues);
