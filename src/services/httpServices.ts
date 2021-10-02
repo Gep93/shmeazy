@@ -14,10 +14,13 @@ interface Idata {
     password: string
 }
 
+//const DOMAIN = "localhost:5000";
+const DOMAIN = "93.103.76.8:5000";
+
 const authenticateUser = async (data: Idata): Promise<any> => {
     try {
-        const {data: jwt} = await axios.post("http://localhost:5000/api/auth", data);
-        // console.log(jwt);
+        const {data: jwt} = await axios.post(`http://${DOMAIN}/api/auth`, data);
+        console.log("auth jwt", jwt);
         return jwt;
     } catch(err) {
         console.log(err);
@@ -61,7 +64,7 @@ export const getShoppingList = async (token: string, id: string): Promise<any> =
 export const getShoppingLists = async (token: string): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.get("http://localhost:5000/lists");
+        const {data} = await axios.get(`http://${DOMAIN}/lists`);
         return data.lists;
     } catch (err) {
         console.log(err);
