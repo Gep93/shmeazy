@@ -15,7 +15,7 @@ interface Idata {
 }
 
 //const DOMAIN = "localhost:5000";
-const DOMAIN = "93.103.76.8:5000";
+const DOMAIN = "93.103.76.8:5001";
 
 const authenticateUser = async (data: Idata): Promise<any> => {
     try {
