@@ -31,7 +31,7 @@ const authenticateUser = async (data: Idata): Promise<any> => {
 const createNewUser = async (data: Idata): Promise<any> => {
     const {username, email, password} = data;
     try {
-        const user = await axios.post(`${DOMAIN}/api/users`, {username, email, password});
+        const user = await axios.post(`https://${DOMAIN}/api/users`, {username, email, password});
         return user;
     } catch(err) {
         console.log(err);
@@ -75,7 +75,7 @@ export const getShoppingLists = async (token: string): Promise<any> => {
 export const addNewShoppingList = async (token: string, _list: IShoppingList): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.post(`${DOMAIN}/lists`, {list: _list});
+        const {data} = await axios.post(`https://${DOMAIN}/lists`, {list: _list});
         console.log(data);
         return data;
     } catch (err) {
@@ -86,7 +86,7 @@ export const addNewShoppingList = async (token: string, _list: IShoppingList): P
 export const updateShoppingList = async (token: string, body: {list: IShoppingList}, id: string) : Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const data = await axios.put(`${DOMAIN}/lists/${id}`, body);
+        const data = await axios.put(`https://${DOMAIN}/lists/${id}`, body);
         return data;
     } catch (err) {
         console.log(err);
@@ -96,7 +96,7 @@ export const updateShoppingList = async (token: string, body: {list: IShoppingLi
 export const updateShoppingLists = async (token: string, body: {lists: IShoppingList[]}) : Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const data = await axios.put(`${DOMAIN}/lists`, body);
+        const data = await axios.put(`https://${DOMAIN}/lists`, body);
         return data;
     } catch (err) {
         console.log(err);
@@ -106,7 +106,7 @@ export const updateShoppingLists = async (token: string, body: {lists: IShopping
 export const updateList = async (token: string, oldCreated: string, newList: IShoppingList ): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.put(`${DOMAIN}/api/lists`, {created: oldCreated, list: newList});
+        const {data} = await axios.put(`https://${DOMAIN}/api/lists`, {created: oldCreated, list: newList});
         console.log(data);
         return data;
     } catch(err) {
@@ -125,7 +125,7 @@ export const deleteShoppingList = async (token: string, id: string): Promise<any
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
         // const {data} = await axios.delete(`http://localhost:5000/api/lists/${id}`);
-        const data = await axios.delete(`${DOMAIN}/lists/${id}`);
+        const data = await axios.delete(`https://${DOMAIN}/lists/${id}`);
         return data;
         // return data;
     } catch (error) {
@@ -142,7 +142,7 @@ export const deleteShoppingList = async (token: string, id: string): Promise<any
 export const deleteShoppingLists = async (token: string): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.delete(`${DOMAIN}/api/lists`);
+        const {data} = await axios.delete(`https://${DOMAIN}/api/lists`);
         return data;
     } catch (err) {
         
