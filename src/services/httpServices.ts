@@ -15,11 +15,12 @@ interface Idata {
 }
 
 //const DOMAIN = "localhost:5000";
-const DOMAIN = "93.103.76.8:5001";
+// const DOMAIN = "93.103.76.8:5001";
+const DOMAIN = "shmeazy-backend.herokuapp.com"
 
 const authenticateUser = async (data: Idata): Promise<any> => {
     try {
-        const {data: jwt} = await axios.post(`http://${DOMAIN}/api/auth`, data);
+        const {data: jwt} = await axios.post(`https://${DOMAIN}/api/auth`, data);
         console.log("auth jwt", jwt);
         return jwt;
     } catch(err) {
@@ -64,7 +65,7 @@ export const getShoppingList = async (token: string, id: string): Promise<any> =
 export const getShoppingLists = async (token: string): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.get(`http://${DOMAIN}/lists`);
+        const {data} = await axios.get(`https://${DOMAIN}/lists`);
         return data.lists;
     } catch (err) {
         console.log(err);
