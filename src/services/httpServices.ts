@@ -48,7 +48,7 @@ const createNewUser = async (data: Idata): Promise<any> => {
 export const getShoppingList = async (token: string, id: string): Promise<any> => {
     axios.defaults.headers.common['x-auth-token'] = token;
     try {
-        const {data} = await axios.get(`${DOMAIN}/lists/${id}`);
+        const {data} = await axios.get(`https://${DOMAIN}/lists/${id}`);
         
         return data.list;
     } catch (err) {
